@@ -1,7 +1,4 @@
-using System;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
@@ -26,7 +23,7 @@ public class PlayerController : MonoBehaviour
 
     public void Update()
     {
-        float speedMultiplier = IsGrounded() ? 1f : 0.5f; // Use full speed on the ground, halve the speed in the air
+        float speedMultiplier = IsGrounded() ? 1f : 0.8f; // Use full speed on the ground, halve the speed in the air
         rb.velocity = new Vector2(horizontal.data * moveSpeed.data * speedMultiplier, rb.velocity.y);
 
         if (!isFacingRight && horizontal.data > 0f)
