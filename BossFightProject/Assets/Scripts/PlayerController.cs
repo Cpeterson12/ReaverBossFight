@@ -10,6 +10,8 @@ public class PlayerController : MonoBehaviour
     public PlayerInputActions playerControls;
     public Transform groundCheck;
     public LayerMask groundLayer;
+    public Transform wallCheck;
+    public LayerMask wallLayer;
 
     private InputAction move;
     private InputAction jump;
@@ -65,7 +67,7 @@ public class PlayerController : MonoBehaviour
 
     private bool IsGrounded()
     {
-        bool isGrounded = Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer);
+        bool isGrounded = Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer) || Physics2D.OverlapCircle(wallCheck.position, 0.2f, wallLayer);
 
         if (isGrounded)
         {
