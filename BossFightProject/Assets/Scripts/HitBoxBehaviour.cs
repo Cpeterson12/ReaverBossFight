@@ -1,4 +1,4 @@
-using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -10,7 +10,12 @@ public class HitBoxBehaviour : MonoBehaviour
   public UnityEvent damageEvent;
   public LayerMask layerMask;
 
-  private void OnTriggerEnter(Collider other)
+  private WaitForSeconds waitTime = new(1f);
+  private Coroutine waitCoroutine;
+
+  
+  
+  private void OnTriggerEnter2D(Collider2D other)
   {
     Debug.Log("frick");
     hurtBox = other.GetComponent<HurtBoxBehaviour>(); 
@@ -29,6 +34,15 @@ public class HitBoxBehaviour : MonoBehaviour
     if (hurtBox != null) 
     {
       hurtBox.health.data -= damage.data;
+      waitCoroutine ??= StartCoroutine(WaitAfterDamage());
     }
   }
+
+  private IEnumerator WaitAfterDamage()
+  {
+    yield return waitTime;
+    waitCoroutine = null;
+  }
+  
 }
+
