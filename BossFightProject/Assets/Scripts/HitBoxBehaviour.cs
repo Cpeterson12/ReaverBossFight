@@ -1,24 +1,34 @@
 using System;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class HitBoxBehaviour : MonoBehaviour
 {
   public FloatData damage;
   public Vector3 knockback = new Vector3(0, 5, 5);
-
+  private HurtBoxBehaviour hurtBox;
+  public UnityEvent damageEvent;
   public LayerMask layerMask;
 
   private void OnTriggerEnter(Collider other)
   {
-    HurtBoxBehaviour h = other.GetComponent<HurtBoxBehaviour>();
     Debug.Log("frick");
-
+    hurtBox = other.GetComponent<HurtBoxBehaviour>(); 
     if (layerMask == (layerMask | (1 << other.transform.gameObject.layer)))
     {
-      if (h != null)
+      if (hurtBox != null)
       {
-        h.health.data -= damage.data;
+        damageEvent.Invoke();
+        DoDamage();
       }
+    }
+  }
+
+  private void DoDamage()
+  {
+    if (hurtBox != null) 
+    {
+      hurtBox.health.data -= damage.data;
     }
   }
 }

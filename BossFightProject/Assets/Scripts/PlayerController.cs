@@ -23,7 +23,7 @@ public class PlayerController : MonoBehaviour
         playerControls = new PlayerInputActions();
     }
 
-    public void Update()
+    public void FixedUpdate()
     {
         float speedMultiplier = IsGrounded() ? 1f : 0.8f; // Use full speed on the ground, halve the speed in the air
         rb.velocity = new Vector2(horizontal.data * moveSpeed.data * speedMultiplier, rb.velocity.y);

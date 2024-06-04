@@ -12,7 +12,7 @@ public class FacePlayer : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         // Calculate the direction vector from the enemy to the player
         Vector3 direction = playerTransform.position - transform.position;
