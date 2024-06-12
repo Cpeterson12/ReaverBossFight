@@ -10,7 +10,7 @@ public class HitBoxBehaviour : MonoBehaviour
   public UnityEvent damageEvent;
   public LayerMask layerMask;
 
-  private WaitForSeconds waitTime = new(1f);
+  private WaitForSeconds waitTime = new(3f);
   private Coroutine waitCoroutine;
 
   

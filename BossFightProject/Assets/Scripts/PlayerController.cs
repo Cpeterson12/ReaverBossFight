@@ -12,9 +12,11 @@ public class PlayerController : MonoBehaviour
     public LayerMask groundLayer;
     public Transform wallCheck;
     public LayerMask wallLayer;
+    public Collider2D attackCollider;
 
     private InputAction move;
     private InputAction jump;
+    private InputAction fire;
     private bool isFacingRight = true;
     private bool hasDoubleJumped = false;
 
@@ -88,5 +90,18 @@ public class PlayerController : MonoBehaviour
     public void Move(InputAction.CallbackContext context)
     {
         horizontal.data = context.ReadValue<Vector2>().x;
+    }
+
+    public void Attack(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            attackCollider.gameObject.SetActive(true);
+        }
+        if (context.canceled)
+        {
+            attackCollider.gameObject.SetActive(false);
+        }
+        
     }
 }
