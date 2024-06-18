@@ -17,7 +17,6 @@ public class HitBoxBehaviour : MonoBehaviour
   
   private void OnTriggerEnter2D(Collider2D other)
   {
-    Debug.Log("frick");
     hurtBox = other.GetComponent<HurtBoxBehaviour>(); 
     if (layerMask == (layerMask | (1 << other.transform.gameObject.layer)))
     {
