@@ -13,7 +13,7 @@ public class EnemyStateMachine : MonoBehaviour
     }
 
     public Transform playerTransform;
-    public float attackRange = 3f;
+    public float attackRange = 5f;
     public float moveSpeed = 3f;
     public float attackCooldown = 3f;
 
@@ -42,7 +42,7 @@ public class EnemyStateMachine : MonoBehaviour
     IEnumerator Searching()
     {
         Debug.Log("Searching for player");
-        if (Vector3.Distance( playerTransform.position, transform.position) <= attackRange)
+        if (Vector3.Distance(playerTransform.position, transform.position) <= attackRange)
         {
             currentState = EnemyState.Attacking;
         }
@@ -56,7 +56,13 @@ public class EnemyStateMachine : MonoBehaviour
     IEnumerator Approaching()
     {
         Debug.Log("Approaching player");
-        Vector3 direction = (playerTransform.position - transform.position).normalized;
+        Vector3 playerPosition = playerTransform.position;
+        Vector3 enemyPosition = transform.position;
+        
+        
+        playerPosition.y = enemyPosition.y;
+        
+        Vector3 direction = (playerPosition - enemyPosition).normalized;
         transform.Translate(direction * moveSpeed * Time.deltaTime);
         currentState = EnemyState.Searching;
         yield return null;
