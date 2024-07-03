@@ -9,17 +9,20 @@ public class EnemyStateMachine : MonoBehaviour
         Searching,
         Approaching,
         Attacking,
-        Waiting
+        Waiting,
+        RangedAttack
     }
 
     public Transform playerTransform;
     public float attackRange = 5f;
     public float moveSpeed = 3f;
     public float attackCooldown = 3f;
+    public float detectionRange = 20f;
 
-    public UnityEvent[] attackEvents;
+    public UnityEvent[] attackEvents, rangedAttackEvents;
 
     private EnemyState currentState;
+    public BoomerangWeapon snare;
 
     void Start()
     {
@@ -42,16 +45,23 @@ public class EnemyStateMachine : MonoBehaviour
     IEnumerator Searching()
     {
         Debug.Log("Searching for player");
-        if (Vector3.Distance(playerTransform.position, transform.position) <= attackRange)
+        float distanceToPlayer = Vector3.Distance(playerTransform.position, transform.position);
+        
+        if (distanceToPlayer <= attackRange)
         {
             currentState = EnemyState.Attacking;
         }
-        else
+        else if (distanceToPlayer <= detectionRange)
         {
             currentState = EnemyState.Approaching;
         }
+        else
+        {
+            currentState = EnemyState.RangedAttack;
+        }
         yield return null;
     }
+
 
     IEnumerator Approaching()
     {
@@ -73,6 +83,19 @@ public class EnemyStateMachine : MonoBehaviour
         Debug.Log("Attacking player");
         int randomAttack = Random.Range(0, attackEvents.Length);
         attackEvents[randomAttack].Invoke();
+        currentState = EnemyState.Waiting;
+        yield return null;
+    }
+    
+    IEnumerator RangedAttack()
+    {
+        Debug.Log("Attacking player");
+        int randomRangedAttack = Random.Range(0, rangedAttackEvents.Length);
+        rangedAttackEvents[randomRangedAttack].Invoke();
+        if (snare != null && playerTransform != null)
+        {
+            snare.ThrowBoomerang(playerTransform.position, this.transform);
+        }
         currentState = EnemyState.Waiting;
         yield return null;
     }
