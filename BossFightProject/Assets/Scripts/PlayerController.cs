@@ -1,4 +1,6 @@
+using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
@@ -14,11 +16,14 @@ public class PlayerController : MonoBehaviour
     public LayerMask wallLayer;
     public Collider2D attackCollider;
 
+    public UnityEvent attackEvent;
+
     private InputAction move;
     private InputAction jump;
     private InputAction fire;
     private bool isFacingRight = true;
     private bool hasDoubleJumped = false;
+    private bool canAttack = true;
 
     private void Awake()
     {
@@ -79,6 +84,12 @@ public class PlayerController : MonoBehaviour
         return isGrounded;
     }
 
+    private bool CanAttack()
+    {
+        bool canAttack = false;
+        return canAttack;
+    }
+
     private void Flip()
     {
         isFacingRight = !isFacingRight;
@@ -94,14 +105,26 @@ public class PlayerController : MonoBehaviour
 
     public void Attack(InputAction.CallbackContext context)
     {
-        if (context.performed)
+        if (context.performed && canAttack)
         {
             attackCollider.gameObject.SetActive(true);
+            attackEvent.Invoke();
+            canAttack = false;
+            StartCoroutine(attackCooldown());
+
         }
         if (context.canceled)
         {
             attackCollider.gameObject.SetActive(false);
+
         }
+        
+    }
+
+    IEnumerator attackCooldown()
+    {
+        yield return new WaitForSeconds(.4f);
+        canAttack = true;
         
     }
 }
