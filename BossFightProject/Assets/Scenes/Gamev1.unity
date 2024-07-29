@@ -196,7 +196,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 126491795}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: FrontSnare_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -282,6 +282,119 @@ Transform:
   - {fileID: 1702894852}
   m_Father: {fileID: 1176726215}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 13.709}
+--- !u!1 &222100721
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 222100722}
+  - component: {fileID: 222100724}
+  - component: {fileID: 222100723}
+  m_Layer: 9
+  m_Name: Snare HitBox
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &222100722
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 222100721}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 305940277}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &222100723
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 222100721}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fd8d63e8c8c7f742a17b1e3ee6bcf91, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: {fileID: 0}
+  knockback: {x: 0, y: 5, z: 5}
+  damageEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 222100723}
+        m_TargetAssemblyTypeName: HitBoxBehaviour, Assembly-CSharp
+        m_MethodName: DoDamage
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 0
+  hitboxCollider: {fileID: 222100724}
+  activationDelay: {fileID: 11400000, guid: 14f62588a0c77384e87c2fb5da631a51, type: 2}
+  activeTime: {fileID: 11400000, guid: ae7bcea0fb55656459c0dbd5d68148d0, type: 2}
+--- !u!61 &222100724
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 222100721}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.04755844, y: -0.0120972395}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.63037944, y: 0.68564725}
+  m_EdgeRadius: 0
 --- !u!1 &237147499
 GameObject:
   m_ObjectHideFlags: 0
@@ -414,7 +527,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.38155508, y: 0.66174513}
+  m_Offset: {x: -1.6090308, y: -0.5387597}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -425,7 +538,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.7631097, y: 4.99839}
+  m_Size: {x: 3.110233, y: 2.5973792}
   m_EdgeRadius: 0
 --- !u!1 &268721114
 GameObject:
@@ -760,6 +873,18 @@ MonoBehaviour:
           m_StringArgument: Throw
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 222100723}
+        m_TargetAssemblyTypeName: HitBoxBehaviour, Assembly-CSharp
+        m_MethodName: ActivateHitbox
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Throw
+          m_BoolArgument: 0
+        m_CallState: 2
   snare: {fileID: 305940278}
   jumpHeight: 7
   jumpDuration: 1
@@ -831,7 +956,7 @@ GameObject:
   m_Component:
   - component: {fileID: 305940277}
   - component: {fileID: 305940278}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: FrontSnare_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -853,6 +978,7 @@ Transform:
   m_Children:
   - {fileID: 126491795}
   - {fileID: 1312359981}
+  - {fileID: 222100722}
   m_Father: {fileID: 1624983871}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 110.071}
 --- !u!114 &305940278
@@ -954,7 +1080,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 419493651}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: BackSnare_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1360,7 +1486,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 571643622}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: FrontSnare_3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1769,7 +1895,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 798226876}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: BackSnare_3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2515,7 +2641,7 @@ Transform:
   m_GameObject: {fileID: 1032882037}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.43, y: -1.9, z: 0.07705331}
+  m_LocalPosition: {x: 12.8, y: -1.9, z: 0.07705331}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2991,7 +3117,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1312359981}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: BackSnare_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3150,6 +3276,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1433648083}
   - component: {fileID: 1433648084}
+  - component: {fileID: 1433648085}
   m_Layer: 10
   m_Name: Player
   m_TagString: Untagged
@@ -3222,6 +3349,20 @@ PolygonCollider2D:
       - {x: 1.64, y: -6.94}
       - {x: 0.87, y: 3.84}
   m_UseDelaunayMesh: 0
+--- !u!114 &1433648085
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1433648082}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a92af10534c64d48abde89b2fd86f2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: {fileID: 11400000, guid: aa06d9b8d4962504bb5790c52b27f03e, type: 2}
+  rb: {fileID: 1032882041}
 --- !u!1 &1441433802
 GameObject:
   m_ObjectHideFlags: 0
@@ -8649,7 +8790,7 @@ Transform:
   m_GameObject: {fileID: 1574397521}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.7930784, y: -0.74, z: 0.054452494}
+  m_LocalPosition: {x: -13.61, y: -0.74, z: 0.054452494}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

@@ -59,7 +59,7 @@ public class HitBoxBehaviour : MonoBehaviour
     }
   }
 
-  private void DoDamage()
+  public void DoDamage()
   {
     if (hurtBox != null) 
     {
