@@ -15,6 +15,7 @@ public class PlayerController : MonoBehaviour
     public Transform wallCheck;
     public LayerMask wallLayer;
     public Collider2D attackCollider;
+    public Collider2D hitBox;
 
     public UnityEvent attackEvent;
 
@@ -24,24 +25,49 @@ public class PlayerController : MonoBehaviour
     private bool isFacingRight = true;
     private bool hasDoubleJumped = false;
     private bool canAttack = true;
+    
+    public float dashDistance = 7f;
+    public float dashDuration = 0.2f;
+    public float dashCooldown = 0.5f;
+    private bool canDash = true;
+    private bool isDashing = false;
+    private InputAction dash;
 
     private void Awake()
     {
         playerControls = new PlayerInputActions();
+        
+        dash = playerControls.Player.Dash;
+        
+        dash.performed += Dash;
+    }
+    
+    private void OnEnable()
+    {
+        playerControls.Player.Enable();
+    }
+
+    private void OnDisable()
+    {
+        playerControls.Player.Disable();
     }
 
     public void FixedUpdate()
     {
-        float speedMultiplier = IsGrounded() ? 1f : 0.8f; // Use full speed on the ground, halve the speed in the air
-        rb.velocity = new Vector2(horizontal.data * moveSpeed.data * speedMultiplier, rb.velocity.y);
+        if (!isDashing)
+        {
+            float speedMultiplier =
+                IsGrounded() ? 1f : 0.8f; // Use full speed on the ground, halve the speed in the air
+            rb.velocity = new Vector2(horizontal.data * moveSpeed.data * speedMultiplier, rb.velocity.y);
 
-        if (!isFacingRight && horizontal.data > 0f)
-        {
-            Flip();
-        }
-        else if (isFacingRight && horizontal.data < 0f)
-        {
-            Flip();
+            if (!isFacingRight && horizontal.data > 0f)
+            {
+                Flip();
+            }
+            else if (isFacingRight && horizontal.data < 0f)
+            {
+                Flip();
+            }
         }
     }
 
@@ -126,5 +152,43 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(.4f);
         canAttack = true;
         
+    }
+    
+    private void Dash(InputAction.CallbackContext context)
+    {
+        if (canDash && !isDashing)
+        {
+            StartCoroutine(PerformDash());
+        }
+    }
+
+    private IEnumerator PerformDash()
+    {
+        canDash = false;
+        isDashing = true;
+        hasDoubleJumped = false;
+        float originalGravity = rb.gravityScale;
+        rb.gravityScale = 0;
+
+        hitBox.enabled = false;
+
+        Vector2 dashDirection = isFacingRight ? Vector2.right : Vector2.left;
+        Vector2 dashVelocity = dashDirection * (dashDistance / dashDuration);
+
+        float dashTimer = 0;
+        while (dashTimer < dashDuration)
+        {
+            rb.velocity = dashVelocity;
+            dashTimer += Time.fixedDeltaTime;
+            yield return new WaitForFixedUpdate();
+        }
+
+        rb.gravityScale = originalGravity;
+        isDashing = false;
+
+        hitBox.enabled = true;
+
+        yield return new WaitForSeconds(dashCooldown);
+        canDash = true;
     }
 }

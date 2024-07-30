@@ -23,7 +23,8 @@ public class EnemyStateMachine : MonoBehaviour
 
     private EnemyState currentState;
     public BoomerangWeapon snare;
-    
+    public FacePlayer facePlayer;
+
     public float jumpHeight = 5f;
     public float jumpDuration = 1f;
     public float slamDuration = 0.3f;
@@ -38,8 +39,10 @@ public class EnemyStateMachine : MonoBehaviour
         {
             playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
         }
+        facePlayer = GetComponent<FacePlayer>();
         currentState = EnemyState.Searching;
         StartCoroutine(StateMachine());
+        
     }
 
     IEnumerator StateMachine()
@@ -52,7 +55,7 @@ public class EnemyStateMachine : MonoBehaviour
 
     IEnumerator Searching()
     {
-        Debug.Log("Searching for player");
+        ;
         float distanceToPlayer = Vector3.Distance(playerTransform.position, transform.position);
         
         if (distanceToPlayer <= attackRange)
@@ -73,7 +76,6 @@ public class EnemyStateMachine : MonoBehaviour
 
     IEnumerator Approaching()
     {
-        Debug.Log("Approaching player");
         Vector3 playerPosition = playerTransform.position;
         Vector3 enemyPosition = transform.position;
         
@@ -88,7 +90,7 @@ public class EnemyStateMachine : MonoBehaviour
 
     IEnumerator Attacking()
     {
-        Debug.Log("Attacking player");
+        facePlayer.EnableTracking(false);
         int randomAttack = Random.Range(0, attackEvents.Length);
         attackEvents[randomAttack].Invoke();
         currentState = EnemyState.Waiting;
@@ -97,7 +99,6 @@ public class EnemyStateMachine : MonoBehaviour
     
     IEnumerator RangedAttack()
     {
-        Debug.Log("Attacking player");
         int randomRangedAttack = Random.Range(0, rangedAttackEvents.Length);
         rangedAttackEvents[randomRangedAttack].Invoke();
         if (snare != null && playerTransform != null)
@@ -112,6 +113,7 @@ public class EnemyStateMachine : MonoBehaviour
     {
         Debug.Log("Waiting after attack");
         yield return new WaitForSeconds(attackCooldown);
+        facePlayer.EnableTracking(true);
         currentState = EnemyState.Searching;
     }
     
