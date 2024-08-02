@@ -32,6 +32,10 @@ public class PlayerController : MonoBehaviour
     private bool canDash = true;
     private bool isDashing = false;
     private InputAction dash;
+    
+    public float knockbackForce = 10f;
+    public float knockbackDuration = 0.5f;
+    private bool isKnockedBack = false;
 
     private void Awake()
     {
@@ -54,7 +58,7 @@ public class PlayerController : MonoBehaviour
 
     public void FixedUpdate()
     {
-        if (!isDashing)
+        if (!isDashing && !isKnockedBack)
         {
             float speedMultiplier =
                 IsGrounded() ? 1f : 0.8f; // Use full speed on the ground, halve the speed in the air
@@ -190,5 +194,32 @@ public class PlayerController : MonoBehaviour
 
         yield return new WaitForSeconds(dashCooldown);
         canDash = true;
+    }
+    
+    public void Knockback()
+    {
+        if (!isKnockedBack)
+        {
+            StartCoroutine(PerformKnockback());
+        }
+    }
+
+    private IEnumerator PerformKnockback()
+    {
+        yield return new WaitForSeconds(.45f);
+        isKnockedBack = true;
+        
+        playerControls.Player.Disable();
+        
+        float knockbackDirection = isFacingRight ? -1f : 1f;
+    
+        // Apply knockback force
+        rb.velocity = new Vector2(knockbackForce * knockbackDirection, rb.velocity.y);
+        
+        yield return new WaitForSeconds(knockbackDuration);
+        
+        playerControls.Player.Enable();
+    
+        isKnockedBack = false;
     }
 }
