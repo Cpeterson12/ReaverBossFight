@@ -16,7 +16,7 @@ public class EnemyStateMachine : MonoBehaviour
     public Transform playerTransform;
     public float attackRange = 5f;
     public float moveSpeed = 3f;
-    public float attackCooldown = 3f;
+    public float attackCooldown = 1f;
     public float detectionRange = 20f;
 
     public UnityEvent[] attackEvents, rangedAttackEvents;
