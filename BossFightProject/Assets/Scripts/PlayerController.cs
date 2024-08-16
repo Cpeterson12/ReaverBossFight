@@ -36,6 +36,7 @@ public class PlayerController : MonoBehaviour
     public float knockbackForce = 10f;
     public float knockbackDuration = 0.5f;
     private bool isKnockedBack = false;
+    public GameObject pivotEnemy;
 
     private void Awake()
     {
@@ -135,11 +136,14 @@ public class PlayerController : MonoBehaviour
 
     public void Attack(InputAction.CallbackContext context)
     {
+        
         if (context.performed && canAttack)
         {
             attackCollider.gameObject.SetActive(true);
             attackEvent.Invoke();
             canAttack = false;
+            Debug.Log($"Player position: {transform.position.x}, Enemy position: {pivotEnemy.transform.position.x}");
+           
             StartCoroutine(attackCooldown());
 
         }
@@ -148,6 +152,7 @@ public class PlayerController : MonoBehaviour
             attackCollider.gameObject.SetActive(false);
 
         }
+        
         
     }
 
@@ -196,30 +201,40 @@ public class PlayerController : MonoBehaviour
         canDash = true;
     }
     
-    public void Knockback()
+    public void Knockback(Transform pivotEnemy)
     {
         if (!isKnockedBack)
         {
-            StartCoroutine(PerformKnockback());
+            StartCoroutine(PerformKnockback(pivotEnemy));
         }
     }
 
-    private IEnumerator PerformKnockback()
+    private IEnumerator PerformKnockback( Transform pivotEnemy)
     {
         yield return new WaitForSeconds(.45f);
         isKnockedBack = true;
-        
+       
         playerControls.Player.Disable();
         
-        float knockbackDirection = isFacingRight ? -1f : 1f;
-    
-        // Apply knockback force
-        rb.velocity = new Vector2(knockbackForce * knockbackDirection, rb.velocity.y);
+        Debug.Log($"Player position: {transform.position.x}, Enemy position: {pivotEnemy.transform.position.x}");
+
+        float knockbackDirection;
+        if (transform.position.x < pivotEnemy.transform.position.x)
+        {
+            knockbackDirection = -1f;
+        }
+        else
+        {
+            knockbackDirection = 1f; 
+        }
+        
+        Vector2 knockbackVelocity = new Vector2(knockbackForce * knockbackDirection, rb.velocity.y);
+        rb.velocity = knockbackVelocity;
         
         yield return new WaitForSeconds(knockbackDuration);
         
         playerControls.Player.Enable();
-    
+        
         isKnockedBack = false;
     }
 }

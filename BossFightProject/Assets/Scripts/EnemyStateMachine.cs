@@ -1,6 +1,9 @@
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 using System.Collections;
+using System.Collections.Generic;
+using Random = UnityEngine.Random;
 
 public class EnemyStateMachine : MonoBehaviour
 {
@@ -10,16 +13,22 @@ public class EnemyStateMachine : MonoBehaviour
         Approaching,
         Attacking,
         Waiting,
-        RangedAttack
+        RangedAttack,
+        FazeTrans
     }
 
     public Transform playerTransform;
-    public float attackRange = 5f;
-    public float moveSpeed = 3f;
+    public float attackRange = 6f;
+    public float moveSpeed = 5f;
     public float attackCooldown = 1f;
-    public float detectionRange = 20f;
+    public float detectionRange = 22f;
+    public FloatData health;
+    private float speedIndicator = 1f;
+
+    public bool isFirstFaze = true;
 
     public UnityEvent[] attackEvents, rangedAttackEvents;
+    public UnityEvent transitionEvent;
 
     private EnemyState currentState;
     public BoomerangWeapon snare;
@@ -45,6 +54,11 @@ public class EnemyStateMachine : MonoBehaviour
         
     }
 
+    public void ChangeWaitTime(FloatData obj)
+    {
+        attackCooldown = obj.data;
+    }
+
     IEnumerator StateMachine()
     {
         while (true)
@@ -55,21 +69,45 @@ public class EnemyStateMachine : MonoBehaviour
 
     IEnumerator Searching()
     {
-        ;
-        float distanceToPlayer = Vector3.Distance(playerTransform.position, transform.position);
-        
-        if (distanceToPlayer <= attackRange)
+        if (isFirstFaze)
         {
-            currentState = EnemyState.Attacking;
-        }
-        else if (distanceToPlayer <= detectionRange)
-        {
-            currentState = EnemyState.Approaching;
+            speedIndicator = 0.7f;
+
+            float distanceToPlayer = Vector3.Distance(playerTransform.position, transform.position);
+
+            if (distanceToPlayer <= attackRange)
+            {
+                currentState = EnemyState.Attacking;
+            }
+            else if (distanceToPlayer <= detectionRange)
+            {
+                currentState = EnemyState.Approaching;
+            }
+            else
+            {
+                currentState = EnemyState.RangedAttack;
+            }
         }
         else
         {
-            currentState = EnemyState.RangedAttack;
+            speedIndicator = .5f;
+            
+            float distanceToPlayer = Vector3.Distance(playerTransform.position, transform.position);
+
+            if (distanceToPlayer <= attackRange)
+            {
+                currentState = EnemyState.Attacking;
+            }
+            else if (distanceToPlayer <= detectionRange)
+            {
+                currentState = EnemyState.Approaching;
+            }
+            else
+            {
+                currentState = EnemyState.RangedAttack;
+            }
         }
+
         yield return null;
     }
 
@@ -77,8 +115,8 @@ public class EnemyStateMachine : MonoBehaviour
     IEnumerator Approaching()
     {
         Vector3 playerPosition = playerTransform.position;
+       
         Vector3 enemyPosition = transform.position;
-        
         
         playerPosition.y = enemyPosition.y;
         
@@ -112,9 +150,15 @@ public class EnemyStateMachine : MonoBehaviour
     IEnumerator Waiting()
     {
         Debug.Log("Waiting after attack");
-        yield return new WaitForSeconds(attackCooldown);
+        yield return new WaitForSeconds((attackCooldown) * speedIndicator) ;
         facePlayer.EnableTracking(true);
         currentState = EnemyState.Searching;
+        
+        if (health.data <= 100 && isFirstFaze)
+        { 
+            isFirstFaze = false;
+            currentState = EnemyState.FazeTrans;
+        }
     }
     
     public void TriggerJumpAttack()
@@ -127,7 +171,7 @@ public class EnemyStateMachine : MonoBehaviour
         Vector3 startPosition = transform.position;
         float groundLevel = startPosition.y;
 
-        yield return new WaitForSeconds(.45f);
+        yield return new WaitForSeconds(.30f);
 
         // Find player position at the start
         Vector3 playerPosition = playerTransform != null ? playerTransform.position : startPosition;
@@ -172,5 +216,18 @@ public class EnemyStateMachine : MonoBehaviour
 
         // Ensure final position is exactly the target
         transform.position = targetPosition;
+    }
+
+    IEnumerator FazeTrans()
+    {
+        facePlayer.EnableTracking(false);
+       
+        transitionEvent.Invoke();
+        
+        yield return new WaitForSeconds(3f);
+       
+        currentState = EnemyState.Waiting;
+        
+        yield return null;
     }
 }

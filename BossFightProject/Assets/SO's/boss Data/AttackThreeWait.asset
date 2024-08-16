@@ -10,6 +10,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ed3fdaa005bfb534b9884a9fa51691cd, type: 3}
-  m_Name: Attack2ActivationTime
+  m_Name: AttackThreeWait
   m_EditorClassIdentifier: 
-  data: 1.23
+  data: 2.5
